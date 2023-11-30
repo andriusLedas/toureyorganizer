@@ -22,6 +22,9 @@ public class Tournament {
 
     private String name;
 
+    //TODO: add a list of participants
+    //TODO: add Participant winner?
+
     @ManyToOne
     @JoinColumn(name = "organizer_id")
     @JsonIgnore

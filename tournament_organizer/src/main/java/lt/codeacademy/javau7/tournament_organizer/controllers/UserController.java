@@ -32,7 +32,7 @@ public class UserController {
     @GetMapping("/get/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable Long userId) {
         try {
-            User user = userService.findById(userId);
+            User user = userService.getById(userId);
             if (user != null) {
                 return ResponseEntity.ok(user);
             } else {
