@@ -1,4 +1,7 @@
 package lt.codeacademy.javau7.tournament_organizer.services;
 
-public class ParticipantService {
+import org.springframework.stereotype.Service;
+
+
+public interface ParticipantService {
 }

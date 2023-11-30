@@ -1,5 +1,6 @@
 package lt.codeacademy.javau7.tournament_organizer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Tournament {
 
     @ManyToOne
     @JoinColumn(name = "organizer_id")
+    @JsonIgnore
     private User organizer;
 
     @OneToMany(mappedBy = "tournament")

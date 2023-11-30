@@ -23,7 +23,7 @@ public class User {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "organizer")
+    @OneToMany(mappedBy = "organizer", cascade = CascadeType.PERSIST)
     private List<Tournament> organizedTournaments;
 
 }
