@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lt.codeacademy.javau7.tournament_organizer.enums.UserRole;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole USERROLE;
 
     private String username;
     private String email;
