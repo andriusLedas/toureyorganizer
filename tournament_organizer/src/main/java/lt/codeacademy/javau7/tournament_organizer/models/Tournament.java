@@ -21,8 +21,8 @@ public class Tournament {
     private Long id;
 
     private String name;
+    private int numParticipants;
 
-    //TODO: add a list of participants
     //TODO: add Participant winner?
 
     @ManyToOne
@@ -30,6 +30,11 @@ public class Tournament {
     @JsonIgnore
     private User organizer;
 
-    @OneToMany(mappedBy = "tournament")
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.PERSIST)
     private List<Stage> stages;
+
+    // TODO: corresponding methods in Service and Controller
+    @OneToMany(mappedBy = "tournament")
+    private List<Participant> participants;
+
 }

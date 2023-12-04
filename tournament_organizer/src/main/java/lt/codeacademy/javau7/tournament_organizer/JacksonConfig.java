@@ -2,7 +2,7 @@ package lt.codeacademy.javau7.tournament_organizer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import lt.codeacademy.javau7.tournament_organizer.enums.UserRole;
+import lt.codeacademy.javau7.tournament_organizer.utils.UserRole;
 import lt.codeacademy.javau7.tournament_organizer.serialization.UserRoleDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,36 +1,54 @@
 package lt.codeacademy.javau7.tournament_organizer.services;
 
 import jakarta.transaction.Transactional;
+import lt.codeacademy.javau7.tournament_organizer.dtos.ParticipantNameDTO;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.TournamentNotFoundException;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.UserNotFoundException;
+import lt.codeacademy.javau7.tournament_organizer.models.Stage;
 import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 import lt.codeacademy.javau7.tournament_organizer.models.User;
 import lt.codeacademy.javau7.tournament_organizer.repositories.TournamentRepository;
+import lt.codeacademy.javau7.tournament_organizer.utils.StageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class TournamentServiceImpl implements TournamentService{
 
     TournamentRepository tournamentRepository;
     UserService userService;
+    StageHelper stageHelper;
 
-    public TournamentServiceImpl(TournamentRepository tournamentRepository, UserService userService) {
+    public TournamentServiceImpl(TournamentRepository tournamentRepository,
+                                 UserService userService,
+                                 StageHelper stageHelper)
+    {
         this.tournamentRepository = tournamentRepository;
         this.userService = userService;
+        this.stageHelper = stageHelper;
     }
 
     @Override
     @Transactional
     public void createTournament(Long userId, Tournament tournament) throws UserNotFoundException{
        User user = userService.getById(userId);
+       List<Stage> stages = stageHelper.createStages(tournament);
 
             tournament.setOrganizer(user);
+            tournament.setStages(stages);
+
             tournamentRepository.save(tournament);
             user.getOrganizedTournaments().add(tournament);
             userService.saveUser(user);
+    }
+
+    @Override
+    public void saveTournament(Tournament tournament) {tournamentRepository.save(tournament);
     }
 
     @Override

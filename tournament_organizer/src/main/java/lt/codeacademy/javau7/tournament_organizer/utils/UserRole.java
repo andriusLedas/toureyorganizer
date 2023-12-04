@@ -1,4 +1,4 @@
-package lt.codeacademy.javau7.tournament_organizer.enums;
+package lt.codeacademy.javau7.tournament_organizer.utils;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lt.codeacademy.javau7.tournament_organizer.serialization.UserRoleDeserializer;

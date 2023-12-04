@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import lt.codeacademy.javau7.tournament_organizer.enums.UserRole;
+import lt.codeacademy.javau7.tournament_organizer.utils.UserRole;
 
 import java.io.IOException;
 

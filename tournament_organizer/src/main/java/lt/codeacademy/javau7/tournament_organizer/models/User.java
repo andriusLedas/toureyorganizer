@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lt.codeacademy.javau7.tournament_organizer.enums.UserRole;
+import lt.codeacademy.javau7.tournament_organizer.utils.UserRole;
 
 import java.util.List;
 

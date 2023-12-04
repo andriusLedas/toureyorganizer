@@ -1,8 +1,10 @@
 package lt.codeacademy.javau7.tournament_organizer.controllers;
 
 
+import lt.codeacademy.javau7.tournament_organizer.dtos.ParticipantNameDTO;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.TournamentNotFoundException;
 import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
+import lt.codeacademy.javau7.tournament_organizer.services.ParticipantService;
 import lt.codeacademy.javau7.tournament_organizer.services.TournamentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
