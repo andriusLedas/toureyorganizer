@@ -1,6 +1,6 @@
 package lt.codeacademy.javau7.tournament_organizer.services;
 
-import lt.codeacademy.javau7.tournament_organizer.dtos.ParticipantNameDTO;
+import lt.codeacademy.javau7.tournament_organizer.dto.ParticipantNameDTO;
 import lt.codeacademy.javau7.tournament_organizer.models.Participant;
 import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 import lt.codeacademy.javau7.tournament_organizer.repositories.ParticipantRepository;
@@ -20,6 +20,11 @@ public class ParticipantServiceImpl implements ParticipantService {
     public ParticipantServiceImpl(ParticipantRepository participantRepository, TournamentService tournamentService) {
         this.participantRepository = participantRepository;
         this.tournamentService = tournamentService;
+    }
+
+    @Override
+    public void save(Participant participant) {
+        participantRepository.save(participant);
     }
 
     @Override
@@ -43,6 +48,7 @@ public class ParticipantServiceImpl implements ParticipantService {
             // Rethrow or handle the exception as needed
         }
     }
+    //Method called by ParticipantController for incoming list of participant names
     @Override
     public void validateParticipantListSize(Long tournamentId, ParticipantNameDTO participantDTO) {
         Tournament tournament = tournamentService.getById(tournamentId);

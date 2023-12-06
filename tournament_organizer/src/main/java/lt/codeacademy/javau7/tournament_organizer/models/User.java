@@ -20,8 +20,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //UserRole is an ENUM located in the utils package
     @Enumerated(EnumType.STRING)
-    private UserRole USERROLE;
+    private UserRole userRole;
 
     private String username;
     private String email;

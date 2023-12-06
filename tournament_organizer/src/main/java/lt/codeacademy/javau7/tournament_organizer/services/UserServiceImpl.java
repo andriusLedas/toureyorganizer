@@ -1,5 +1,6 @@
 package lt.codeacademy.javau7.tournament_organizer.services;
 import jakarta.transaction.Transactional;
+import lt.codeacademy.javau7.tournament_organizer.dto.UserDTO;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.UserNotFoundException;
 import lt.codeacademy.javau7.tournament_organizer.models.User;
 import lt.codeacademy.javau7.tournament_organizer.repositories.UserRepository;
@@ -18,7 +19,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(User user) {userRepository.save(user);
+    public void createUser(UserDTO userDTO) {
+        User user = new User();
+        user.setUserRole(userDTO.getUserRole());
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        userRepository.save(user);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package lt.codeacademy.javau7.tournament_organizer.controllers;
 
+import lt.codeacademy.javau7.tournament_organizer.dto.UserDTO;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.UserNotFoundException;
 import lt.codeacademy.javau7.tournament_organizer.models.User;
 import lt.codeacademy.javau7.tournament_organizer.services.UserService;
@@ -19,9 +20,9 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody User user) {
+    public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
         try {
-            userService.createUser(user);
+            userService.createUser(userDTO);
             return ResponseEntity.ok("User created successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

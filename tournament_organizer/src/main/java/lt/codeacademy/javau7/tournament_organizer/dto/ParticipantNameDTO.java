@@ -1,4 +1,4 @@
-package lt.codeacademy.javau7.tournament_organizer.dtos;
+package lt.codeacademy.javau7.tournament_organizer.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

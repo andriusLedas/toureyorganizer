@@ -1,7 +1,6 @@
 package lt.codeacademy.javau7.tournament_organizer.services;
 
 import jakarta.transaction.Transactional;
-import lt.codeacademy.javau7.tournament_organizer.dtos.ParticipantNameDTO;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.TournamentNotFoundException;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.UserNotFoundException;
 import lt.codeacademy.javau7.tournament_organizer.models.Stage;
@@ -9,13 +8,10 @@ import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 import lt.codeacademy.javau7.tournament_organizer.models.User;
 import lt.codeacademy.javau7.tournament_organizer.repositories.TournamentRepository;
 import lt.codeacademy.javau7.tournament_organizer.utils.StageHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class TournamentServiceImpl implements TournamentService{

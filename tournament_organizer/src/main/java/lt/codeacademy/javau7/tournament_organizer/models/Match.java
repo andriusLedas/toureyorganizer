@@ -34,4 +34,9 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "participant2_id")
     private Participant participant2;
+
+    public Match (Participant participant1, Participant participant2) {
+        this.participant1 = participant1;
+        this.participant2 = participant2;
+    }
 }

@@ -1,7 +1,6 @@
 package lt.codeacademy.javau7.tournament_organizer.services;
 
 import jakarta.transaction.Transactional;
-import lt.codeacademy.javau7.tournament_organizer.dtos.ParticipantNameDTO;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.TournamentNotFoundException;
 import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 

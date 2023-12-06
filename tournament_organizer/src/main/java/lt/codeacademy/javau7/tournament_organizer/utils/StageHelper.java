@@ -1,5 +1,6 @@
 package lt.codeacademy.javau7.tournament_organizer.utils;
 
+import lombok.NoArgsConstructor;
 import lt.codeacademy.javau7.tournament_organizer.models.Stage;
 import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 import org.springframework.stereotype.Component;
@@ -7,9 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 @Component
+@NoArgsConstructor
 public class StageHelper {
-
-    public StageHelper(){}
 
     public List<Stage> createStages(Tournament tournament) {
         List<Stage> stages = new ArrayList<>();

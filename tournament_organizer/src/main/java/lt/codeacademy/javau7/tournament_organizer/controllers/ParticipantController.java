@@ -1,6 +1,6 @@
 package lt.codeacademy.javau7.tournament_organizer.controllers;
 
-import lt.codeacademy.javau7.tournament_organizer.dtos.ParticipantNameDTO;
+import lt.codeacademy.javau7.tournament_organizer.dto.ParticipantNameDTO;
 import lt.codeacademy.javau7.tournament_organizer.services.ParticipantService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
