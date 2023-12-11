@@ -12,4 +12,6 @@ public class MatchResultDTO {
     private int participant1Score;
     private int participant2Score;
     String winner;
+
+    // dummy comment for commit
 }
