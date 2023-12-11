@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lt.codeacademy.javau7.tournament_organizer.dto.MatchDTO;
 import lt.codeacademy.javau7.tournament_organizer.dto.MatchResultDTO;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.MatchNotFoundException;
+import lt.codeacademy.javau7.tournament_organizer.exceptions.MatchUpdateException;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.TeamAlreadyInAnotherMatchException;
 import lt.codeacademy.javau7.tournament_organizer.models.*;
 import lt.codeacademy.javau7.tournament_organizer.repositories.MatchRepository;
@@ -93,43 +94,48 @@ public class MatchServiceImpl implements MatchService{
 
     @Override
     @Transactional
-    public void updateResult(Long id, MatchResultDTO resultDTO) {
+    public Match updateResult(Long id, MatchResultDTO resultDTO) {
         Match match = getById(id);
 
-        if (winnerBelongsToMatch(id, resultDTO)) {
+        if (hasWinner(resultDTO) && winnerBelongsToMatch(id, resultDTO)) {
             match.setParticipant1Score(resultDTO.getParticipant1Score());
             match.setParticipant2Score(resultDTO.getParticipant2Score());
             match.setWinner(resultDTO.getWinner());
+            matchRepository.save(match);
 
             if (!finalMatch(match)) {
-                updateNextStageMatch(match);
+                return updateNextStageMatch(match);
             }
-            matchRepository.save(match);
+            return match;
+
+        } else {
+            throw new MatchUpdateException("Cannot update match: " +
+                    "winner not specified or does not belong to match.");
         }
     }
 
     @Override
     @Transactional
-    public void updateNextStageMatch(Match match) {
-        if (hasWinner(match)){
-            String winner = match.getWinner();
-            Match nextStageMatch = getNextStageMatch(match);
-            Stage nextStage = nextStageMatch.getStage();
+    public Match updateNextStageMatch(Match match) {
+        Match nextStageMatch = getNextStageMatch(match);
+        Stage nextStage = nextStageMatch.getStage();
+        String winner = match.getWinner();
 
-            if (winner.equalsIgnoreCase(match.getParticipant1())) {
-                nextStageMatch.setParticipant1(winner);
-            } else {
-                nextStageMatch.setParticipant2(winner);
-            }
-
-            matchRepository.save(nextStageMatch);
-            stageService.save(nextStage);
+        if (nextStageMatch.getParticipant1().isEmpty()) {
+            nextStageMatch.setParticipant1(winner);
+        } else {
+            nextStageMatch.setParticipant2(winner);
         }
+
+        matchRepository.save(nextStageMatch);
+        stageService.save(nextStage);
+
+        return nextStageMatch;
     }
 
     @Override
-    public boolean hasWinner(Match match) {
-        return !match.getWinner().isEmpty();
+    public boolean hasWinner(MatchResultDTO matchResultDTO) {
+        return !matchResultDTO.getWinner().isEmpty();
     }
 
     @Override
@@ -139,7 +145,7 @@ public class MatchServiceImpl implements MatchService{
         String participant2 = match.getParticipant2();
         String winner = resultDTO.getWinner();
 
-        if (!winner.isEmpty() && (participant1.equalsIgnoreCase(winner)) ||
+        if (hasWinner(resultDTO) && (participant1.equalsIgnoreCase(winner)) ||
                                  (participant2.equalsIgnoreCase(winner)))
             return true;
 

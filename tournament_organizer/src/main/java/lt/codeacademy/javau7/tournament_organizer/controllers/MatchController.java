@@ -3,6 +3,7 @@ package lt.codeacademy.javau7.tournament_organizer.controllers;
 import lt.codeacademy.javau7.tournament_organizer.dto.MatchDTO;
 import lt.codeacademy.javau7.tournament_organizer.dto.MatchResultDTO;
 import lt.codeacademy.javau7.tournament_organizer.exceptions.MatchNotFoundException;
+import lt.codeacademy.javau7.tournament_organizer.exceptions.MatchUpdateException;
 import lt.codeacademy.javau7.tournament_organizer.models.Match;
 import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 import lt.codeacademy.javau7.tournament_organizer.services.MatchService;
@@ -54,15 +55,18 @@ public class MatchController {
     }
     //DTO body: participant1Score (int), participant2Score (int), winner (string)
     @PutMapping("/updateResult/{matchId}")
-    public ResponseEntity<String> updateMatchResult(
+    public ResponseEntity<?> updateMatchResult(
             @PathVariable Long matchId,
             @RequestBody MatchResultDTO resultDTO) {
         try {
-            matchService.updateResult(matchId, resultDTO);
-            return ResponseEntity.ok("Match result for ID " + matchId + " updated successfully.");
+            Match updatedMatch = matchService.updateResult(matchId, resultDTO);
+            return ResponseEntity.ok(updatedMatch);
         } catch (MatchNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Match with ID " + matchId + " not found.");
+        } catch (MatchUpdateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Failed to update match result: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to update match result: " + e.getMessage());

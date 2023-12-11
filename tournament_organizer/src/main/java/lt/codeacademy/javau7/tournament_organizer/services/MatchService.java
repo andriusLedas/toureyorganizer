@@ -23,13 +23,15 @@ public interface MatchService {
     @Transactional
     void updateMatch(Long id, MatchDTO matchDTO);
 
-    @Transactional
-    void updateResult(Long id, MatchResultDTO resultDTO);
 
     @Transactional
-    void updateNextStageMatch(Match match);
+    Match updateResult(Long id, MatchResultDTO resultDTO);
 
-    boolean hasWinner(Match match);
+    @Transactional
+    Match updateNextStageMatch(Match match);
+
+
+    boolean hasWinner(MatchResultDTO matchResultDTO);
 
     boolean winnerBelongsToMatch(Long matchId, MatchResultDTO resultDTO);
 
