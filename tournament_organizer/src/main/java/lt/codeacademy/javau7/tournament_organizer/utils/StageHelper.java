@@ -1,6 +1,8 @@
 package lt.codeacademy.javau7.tournament_organizer.utils;
 
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
+import lt.codeacademy.javau7.tournament_organizer.models.Match;
 import lt.codeacademy.javau7.tournament_organizer.models.Stage;
 import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 import org.springframework.stereotype.Component;
@@ -11,20 +13,25 @@ import java.util.List;
 @NoArgsConstructor
 public class StageHelper {
 
-    public List<Stage> createStages(Tournament tournament) {
+    @Transactional
+    public List<Stage> createStagesAndMatches(Tournament tournament) {
         List<Stage> stages = new ArrayList<>();
         int numStages = getNumStages(tournament);
+        int numStagePlayers = tournament.getNumParticipants();
 
-        Stage finalStage = new Stage("final");
-        finalStage.setTournament(tournament);
-        stages.add(finalStage);
+        for (int i = 1; i <= numStages; i++) {
+            Stage stage = new Stage("1/" + numStagePlayers / 2);
+            List<Match> matches = stage.getMatches();
 
-        int stageCounter = 1;
-        for (int i = 0; i < numStages-1; i++) {
-            Stage stage = new Stage("1/" + stageCounter * 2);
+            for (int j = 1; j <= numStagePlayers / 2; j++) {
+                Match match = new Match();
+                match.setStage(stage);
+                matches.add(match);
+            }
+
             stage.setTournament(tournament);
             stages.add(stage);
-            stageCounter *= 2;
+            numStagePlayers /= 2;
         }
         return stages;
     }

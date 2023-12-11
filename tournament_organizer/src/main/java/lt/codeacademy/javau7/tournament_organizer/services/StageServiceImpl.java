@@ -6,14 +6,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class StageServiceImpl implements StageService{
 
-        StageRepository stageRepository;
+    StageRepository stageRepository;
 
-        public StageServiceImpl(StageRepository stageRepository) {
-            this.stageRepository = stageRepository;
-        }
-        @Override
-        public void save(Stage stage){
-            stageRepository.save(stage);
-        }
-
+    public StageServiceImpl(StageRepository stageRepository) {
+        this.stageRepository = stageRepository;
     }
+    @Override
+    public void save(Stage stage){
+        stageRepository.save(stage);
+    }
+
+}
