@@ -9,17 +9,16 @@ import lt.codeacademy.javau7.tournament_organizer.exceptions.TeamAlreadyInAnothe
 import lt.codeacademy.javau7.tournament_organizer.models.*;
 import lt.codeacademy.javau7.tournament_organizer.repositories.MatchRepository;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
+
 
 @Service
 public class MatchServiceImpl implements MatchService{
 
+
+
     MatchRepository matchRepository;
     StageService stageService;
-    private static final Logger logger = LoggerFactory.getLogger(MatchServiceImpl.class);
 
     public MatchServiceImpl(MatchRepository matchRepository, StageService stageService) {
         this.matchRepository = matchRepository;
@@ -46,7 +45,6 @@ public class MatchServiceImpl implements MatchService{
         stageMatches.clear();
 
         if (participants == null || participants.isEmpty()) {
-            logger.warn("Attempted to generate first stage matches with an empty list of participants.");
             return;
         }
 

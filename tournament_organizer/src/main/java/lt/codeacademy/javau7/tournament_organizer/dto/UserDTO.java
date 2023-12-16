@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lt.codeacademy.javau7.tournament_organizer.utils.UserRole;
 
 @Data
 @AllArgsConstructor
@@ -12,7 +11,6 @@ import lt.codeacademy.javau7.tournament_organizer.utils.UserRole;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
     private Long id;
-    private UserRole userRole;
     private String username;
     private String email;
     private String password;
@@ -27,8 +25,7 @@ public class UserDTO {
         this.username = username;
     }
 
-    public UserDTO(UserRole userRole, String username, String email, String password) {
-        this.userRole = userRole;
+    public UserDTO(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
