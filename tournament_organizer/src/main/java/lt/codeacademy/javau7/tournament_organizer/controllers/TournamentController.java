@@ -7,6 +7,7 @@ import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 import lt.codeacademy.javau7.tournament_organizer.services.TournamentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class TournamentController {
 
     // DTO body: name (string), numParticipants (int)
     @PostMapping("/create/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or @tournamentService.canCreateTournament(#userId, principal)")
     public ResponseEntity<String> createTournament(
             @PathVariable Long userId,
             @RequestBody TournamentDTO tournamentDTO) {

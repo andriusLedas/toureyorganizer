@@ -75,13 +75,11 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/users/signup/**").permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .requestMatchers("/users/admin/**").hasRole("ADMIN")
-                                .anyRequest().authenticated())
-                .authorizeHttpRequests(authorizeHttp -> {
-                    authorizeHttp.requestMatchers(AUTH_WHITELIST).permitAll();
-                    authorizeHttp.anyRequest().authenticated();
-                });
+                                .requestMatchers("/users/login/**").permitAll()
+                                .requestMatchers(AUTH_WHITELIST).permitAll()
+                                .anyRequest().authenticated()
+                );
+
 
         http.authenticationProvider(authenticationProvider());
 

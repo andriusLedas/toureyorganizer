@@ -9,6 +9,8 @@ import lt.codeacademy.javau7.tournament_organizer.repositories.RoleRepository;
 import lt.codeacademy.javau7.tournament_organizer.repositories.UserRepository;
 import lt.codeacademy.javau7.tournament_organizer.security.payload.MessageResponse;
 import lt.codeacademy.javau7.tournament_organizer.security.payload.SignupRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,11 +18,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     UserRepository userRepository;
@@ -50,28 +55,39 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-
-    private User createUser(SignupRequest signUpRequest) {
+    @Override
+    public User createUser(SignupRequest signUpRequest) {
         String encodedPassword = encoder.encode(signUpRequest.getPassword());
         return new User(signUpRequest.getUsername(), signUpRequest.getEmail(), encodedPassword);
     }
 
-    private Set<Role> mapRoles(Set<String> strRoles) {
+    @Override
+    public Set<Role> mapRoles(Set<String> strRoles) {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
+            log.info("Mapping roles for null input: defaulting to ROLE_USER");
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 Role userRole = switch (role) {
-                    case "admin" -> roleRepository.findByName(ERole.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Error: Role not found."));
-                    case "user" -> roleRepository.findByName(ERole.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException("Error: Role not found."));
-                    default -> roleRepository.findByName(ERole.ROLE_GUEST)
-                            .orElseThrow(() -> new RuntimeException("Error: Role not found."));
+                    case "admin" -> {
+                        log.info("Mapping role 'admin'");
+                        yield roleRepository.findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role not found."));
+                    }
+                    case "user" -> {
+                        log.info("Mapping role 'user'");
+                        yield roleRepository.findByName(ERole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role not found."));
+                    }
+                    default -> {
+                        log.info("Mapping role 'guest'");
+                        yield roleRepository.findByName(ERole.ROLE_GUEST)
+                                .orElseThrow(() -> new RuntimeException("Error: Role not found."));
+                    }
                 };
                 roles.add(userRole);
             });
@@ -79,12 +95,13 @@ public class UserServiceImpl implements UserService {
         return roles;
     }
 
-
-    private boolean usernameExists(String username) {
+    @Override
+    public boolean usernameExists(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    private boolean emailExists(String email) {
+    @Override
+    public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
     }
 
@@ -121,14 +138,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(Long id) throws UserNotFoundException {
-        User user = getById(id);
-        userRepository.delete(user);
+    public void deleteUser(Long id) {
+
+            User user = getById(id);
+            userRepository.delete(user);
+    }
+
+    @Override
+    public boolean canDeleteUser(Long userId, UserDetailsImpl currentUser) {
+
+        User userToDelete = getById(userId);
+        return userToDelete != null && currentUser.getId().equals(userId);
     }
 
     @Override
     public void saveUser(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public Long getIdFromUsername(String userName) {
+        Optional<User> user = userRepository.findByUsername(userName);
+        if (user.isPresent()) {
+            return user.get().getId();
+        }
+        throw new UserNotFoundException("User with name " + userName + " not found.");
     }
 }
 

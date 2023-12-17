@@ -9,7 +9,6 @@ import lt.codeacademy.javau7.tournament_organizer.models.Stage;
 import lt.codeacademy.javau7.tournament_organizer.models.Tournament;
 import lt.codeacademy.javau7.tournament_organizer.models.User;
 import lt.codeacademy.javau7.tournament_organizer.repositories.TournamentRepository;
-import lt.codeacademy.javau7.tournament_organizer.utils.StageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,15 +19,15 @@ public class TournamentServiceImpl implements TournamentService{
 
     TournamentRepository tournamentRepository;
     UserService userService;
-    StageHelper stageHelper;
+    StageService stageService;
 
     public TournamentServiceImpl(TournamentRepository tournamentRepository,
                                  UserService userService,
-                                 StageHelper stageHelper)
+                                 StageService stageService)
     {
         this.tournamentRepository = tournamentRepository;
         this.userService = userService;
-        this.stageHelper = stageHelper;
+        this.stageService = stageService;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class TournamentServiceImpl implements TournamentService{
                 tournamentDTO.getNumParticipants(),
                 organizer);
 
-        List<Stage> stages = stageHelper.createStagesAndMatches(tournament);
+        List<Stage> stages = stageService.createStagesAndMatches(tournament);
         tournament.setStages(stages);
 
             tournamentRepository.save(tournament);
@@ -123,5 +122,7 @@ public class TournamentServiceImpl implements TournamentService{
                 .map(StageDTO::new)
                 .collect(Collectors.toList());
     }
+
+    public boolean canCreateTournament()
 }
 

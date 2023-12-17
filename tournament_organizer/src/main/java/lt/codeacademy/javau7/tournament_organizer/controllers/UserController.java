@@ -74,6 +74,7 @@ public class UserController {
     }
 
     @GetMapping("/get/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getUserById(@PathVariable Long userId) {
         try {
             User user = userService.getById(userId);
@@ -83,6 +84,9 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("User with ID " + userId + " not found");
             }
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Access denied: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to retrieve user: " + e.getMessage());
@@ -107,8 +111,9 @@ public class UserController {
                     .body("Failed to retrieve users: " + e.getMessage());
         }
     }
-    //DTO body: userRole (enum), username (string), email (string), password (string)
+
     @PutMapping("/update/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateUser(
             @PathVariable Long userId,
             @RequestBody UserDTO updatedUserDTO) {
@@ -118,13 +123,16 @@ public class UserController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found: " + e.getMessage());
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Access denied: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to update user: " + e.getMessage());
         }
     }
     @DeleteMapping("/delete/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or @userService.canDeleteUser(#userId)")
+    @PreAuthorize("hasRole('ADMIN') or @userService.canDeleteUser(#userId, principal)")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
             userService.deleteUser(userId);
@@ -140,5 +148,4 @@ public class UserController {
                     .body("Failed to delete user: " + e.getMessage());
         }
     }
-
 }
